@@ -1,12 +1,12 @@
 #define PIXEL_PIN    10    // Digital IO pin connected to the NeoPixels.
 #include <Adafruit_NeoPixel.h>
-#define PIXEL_COUNT 6
-int motor1Pin1 = 7; // pin 2 on L293D IC
-int motor1Pin2 = 8; // pin 7 on L293D IC
-int enable1Pin = 6; // pin 1 on L293D IC
-int motor2Pin1 = 3; // pin 10 on L293D IC
-int motor2Pin2 = 9; // pin 15 on L293D IC
-int enable2Pin = 11; // pin 9 on L293D IC
+#define PIXEL_COUNT 6  //leds rgb
+int motor1Pin1 = 7; // pin 7 on L293D IC
+int motor1Pin2 = 8; // pin 8 on L293D IC
+int enable1Pin = 6; // pin 6 on L293D IC
+int motor2Pin1 = 3; // pin 3 on L293D IC
+int motor2Pin2 = 9; // pin 9 on L293D IC
+int enable2Pin = 11; // pin 11 on L293D IC
 int ledPin1 = 5;
 int state;
 int flag=0;        //makes sure that the serial only prints once the state
