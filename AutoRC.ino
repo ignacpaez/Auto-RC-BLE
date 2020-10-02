@@ -1,15 +1,15 @@
-#define PIXEL_PIN    10    // Digital IO pin connected to the NeoPixels.
+#define PIXEL_PIN    10    // pin conectado a la tira NeoPixels.
 #include <Adafruit_NeoPixel.h>
 #define PIXEL_COUNT 6  //leds rgb
-int motor1Pin1 = 7; // pin 7 on L293D IC
-int motor1Pin2 = 8; // pin 8 on L293D IC
-int enable1Pin = 6; // pin 6 on L293D IC
-int motor2Pin1 = 3; // pin 3 on L293D IC
-int motor2Pin2 = 9; // pin 9 on L293D IC
-int enable2Pin = 11; // pin 11 on L293D IC
+int motor1Pin1 = 7; // pin 7 en L293D
+int motor1Pin2 = 8; // pin 8 en L293D 
+int enable1Pin = 6; // pin 6 en L293D 
+int motor2Pin1 = 3; // pin 3 en L293D 
+int motor2Pin2 = 9; // pin 9 en L293D 
+int enable2Pin = 11; // pin 11 en L293D 
 int ledPin1 = 5;
 int state;
-int flag=0;        //makes sure that the serial only prints once the state
+int flag=0;        //estado nivel 0
 int stateStop=0;
 const int speed = 100;
 
@@ -18,7 +18,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NE
 void setup() {
     strip.begin();
     strip.show(); 
-    // sets the pins as outputs:
+    // setear puertos de salida
     pinMode(ledPin1, OUTPUT);
     pinMode(motor1Pin1, OUTPUT);
     pinMode(motor1Pin2, OUTPUT);
@@ -26,20 +26,20 @@ void setup() {
     pinMode(motor2Pin1, OUTPUT);
     pinMode(motor2Pin2, OUTPUT);
     pinMode(enable2Pin, OUTPUT);
-    // sets enable1Pin and enable2Pin high so that motor can turn on:
+    // setear puertos a encendido
     digitalWrite(enable1Pin, HIGH);
     digitalWrite(enable2Pin, HIGH);
-    // initialize serial communication at 9600 bits per second:
+    // puerto para iniciar
     Serial.begin(9600);
 }
 
 void loop() {
-    //if some date is sent, reads it and saves in state
+    //estado para las acciones de receptor
     if(Serial.available() > 0){     
       state = Serial.read();   
       flag=0;
     }   
-    // if the state is 'F' the DC motor will go forward
+    // F para retroceder
     if (state == 'F') {
         digitalWrite(motor1Pin1, speed);
         digitalWrite(motor1Pin2, LOW); 
@@ -50,7 +50,7 @@ void loop() {
         }
     }
     
-    // if the state is 'R' the motor will turn left
+    // R para izquierda
     else if (state == 'R') {
         digitalWrite(motor1Pin1, HIGH); 
         digitalWrite(motor1Pin2, LOW); 
@@ -64,7 +64,7 @@ void loop() {
         state=3;
         stateStop=1;
     }
-    // if the state is 'S' the motor will Stop
+    // S para detener
     else if (state == 'S' || stateStop == 1) {
         digitalWrite(motor1Pin1, LOW); 
         digitalWrite(motor1Pin2, LOW); 
@@ -76,7 +76,7 @@ void loop() {
         }
         stateStop=0;
     }
-    // if the state is 'L' the motor will turn right
+    // L para derecha
     else if (state == 'L') {
         digitalWrite(motor1Pin1, LOW); 
         digitalWrite(motor1Pin2, LOW); 
@@ -90,7 +90,7 @@ void loop() {
         state=3;
         stateStop=1;
     }
-    // if the state is 'B' the motor will Reverse
+    // B para reversa
     else if (state == 'B') {
         digitalWrite(motor1Pin1, LOW); 
         digitalWrite(motor1Pin2, HIGH);
@@ -112,7 +112,7 @@ void loop() {
 
     else if (state == 'l') {
       uint16_t i, j;
-        for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
+        for(j=0; j<256*5; j++) { // 5 ciclos para los colores en cascada
     for(i=0; i< strip.numPixels(); i++) {
       strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
     }
@@ -123,30 +123,21 @@ void loop() {
 
    else if (state == 'M') {
       for(int i=0;i< strip.numPixels();i++){
-
-    // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-    strip.setPixelColor(i, strip.Color(0,150,0)); // Moderately bright green color.
-
-    strip.show(); // This sends the updated pixel color to the hardware.
-
-    delay(10); // Delay for a period of time (in milliseconds).
-
+          
+    strip.setPixelColor(i, strip.Color(0,150,0)); 
+    strip.show(); 
+    delay(10); 
       }
     }
 
     else if (state == 'Z') {
       for(int i=0;i< strip.numPixels();i++){
 
-    // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-    strip.setPixelColor(i, strip.Color(0,0,255)); // Moderately bright green color.
-
-    strip.show(); // This sends the updated pixel color to the hardware.
-
-    delay(10); // Delay for a period of time (in milliseconds).
-
+    strip.setPixelColor(i, strip.Color(0,0,255));
+    strip.show(); 
+    delay(10);
       }
-    }
-    
+    } 
 }
 
 uint32_t Wheel(byte WheelPos) {
